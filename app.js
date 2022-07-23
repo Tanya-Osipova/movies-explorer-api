@@ -5,12 +5,9 @@ const mongoose = require('mongoose');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const { celebrate, Joi, errors } = require('celebrate');
-const { NotFoundError } = require('./errors/not-found-error');
-const { createUser, login } = require('./controllers/users');
+const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const limiter = require('./middlewares/rate-limiter');
-const auth = require('./middlewares/auth');
 const error = require('./middlewares/error');
 
 const { PORT = 3000 } = process.env;

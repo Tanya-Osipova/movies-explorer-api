@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
     required: [true, 'User name is required'],
     minlength: [2, 'User name should contain mimimum 2 characters'],
     maxlength: [30, 'User name should contain maximum 30 characters'],
-  }
+  },
 });
 
 // Find user by email

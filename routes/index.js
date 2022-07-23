@@ -1,4 +1,5 @@
 const router = require('express').Router();
+
 const { celebrate, Joi } = require('celebrate');
 const { NotFoundError } = require('../errors/not-found-error');
 const { createUser, login } = require('../controllers/users');
@@ -39,3 +40,5 @@ router.use('/movies', require('./movies'));
 router.use('*', () => {
   throw new NotFoundError('Not found');
 });
+
+module.exports = router;
