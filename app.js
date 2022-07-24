@@ -25,7 +25,7 @@ mongoose.connect(MONGO_URI);
 
 app.use(requestLogger);
 
-app.use('/', require('./routes/index'));
+app.use('/api', require('./routes/index'));
 
 app.use(errorLogger);
 app.use(errors());
