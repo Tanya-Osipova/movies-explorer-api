@@ -27,22 +27,28 @@ module.exports.getUser = (req, res, next) => {
 
 // UPDATE
 module.exports.updateUser = (req, res, next) => {
-  User.findByIdAndUpdate(
-    req.user._id,
-    {
-      name: req.body.name,
-      email: req.body.email,
-    },
-    {
-      new: true,
-      runValidators: true,
-    },
-  )
+  User.findOne({ email: req.body.email })
     .then((user) => {
-      if (!user) {
-        throw new NotFoundError('User does not exist');
+      if (user) {
+        throw new ConflictError('User already exists');
       }
-      return res.send({ data: user });
+      User.findByIdAndUpdate(
+        req.user._id,
+        {
+          name: req.body.name,
+          email: req.body.email,
+        },
+        {
+          new: true,
+          runValidators: true,
+        },
+      )
+        .then((updatedUser) => {
+          if (!updatedUser) {
+            throw new NotFoundError('User does not exist');
+          }
+          return res.send({ data: updatedUser });
+        });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -74,7 +80,11 @@ module.exports.createUser = (req, res, next) => {
           password: hash,
           name,
         }))
-        .then((newUser) => res.status(201).send(newUser));
+        .then((newUser) => res.status(201).send({
+          _id: newUser._id,
+          email: newUser.email,
+          name: newUser.name,
+        }));
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {

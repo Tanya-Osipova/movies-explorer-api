@@ -60,7 +60,7 @@ const movieSchema = new mongoose.Schema({
     required: [true, 'Owner is required'],
   },
   movieId: {
-    type: String,
+    type: Number,
     required: [true, 'Movie id is required'],
   },
   nameRU: {

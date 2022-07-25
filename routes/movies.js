@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
+const validator = require('validator');
 const { getMovies, createMovie, deleteMovie } = require('../controllers/movies');
 
 // GET
@@ -13,19 +14,34 @@ router.post('/', celebrate({
     duration: Joi.number().required(),
     year: Joi.number().required(),
     description: Joi.string().required(),
-    image: Joi.string().required().pattern(/^https?:\/\/(www\.)?[a-zA-Z0-9-]+\.\w{2,}\/?\S*#?$/),
-    trailerLink: Joi.string().required().pattern(/^https?:\/\/(www\.)?[a-zA-Z0-9-]+\.\w{2,}\/?\S*#?$/),
-    thumbnail: Joi.string().required().pattern(/^https?:\/\/(www\.)?[a-zA-Z0-9-]+\.\w{2,}\/?\S*#?$/),
+    image: Joi.string().required().custom((value, helpers) => {
+      if (validator.isURL(value)) {
+        return value;
+      }
+      return helpers.message('Invalid URL');
+    }),
+    trailerLink: Joi.string().required().custom((value, helpers) => {
+      if (validator.isURL(value)) {
+        return value;
+      }
+      return helpers.message('Invalid URL');
+    }),
+    thumbnail: Joi.string().required().custom((value, helpers) => {
+      if (validator.isURL(value)) {
+        return value;
+      }
+      return helpers.message('Invalid URL');
+    }),
     nameEN: Joi.string().required(),
     nameRU: Joi.string().required(),
-    movieId: Joi.string().required(),
+    movieId: Joi.number().integer().required(),
   }),
 }), createMovie);
 
 // DELETE
 router.delete('/:movieId', celebrate({
   params: Joi.object().keys({
-    movieId: Joi.string().required().min(24).max(24),
+    movieId: Joi.string().hex().length(24),
   }),
 }), deleteMovie);
 

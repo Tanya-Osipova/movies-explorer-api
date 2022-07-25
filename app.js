@@ -11,10 +11,11 @@ const limiter = require('./middlewares/rate-limiter');
 const error = require('./middlewares/error');
 
 const { PORT = 3000 } = process.env;
-const { MONGO_URI } = process.env;
+const { MONGO_URI = 'mongodb://localhost:27017/moviesdb' } = process.env;
 const app = express();
 
 app.use(helmet());
+app.use(requestLogger);
 app.use(limiter);
 app.use(cookieParser());
 
@@ -22,8 +23,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.connect(MONGO_URI);
-
-app.use(requestLogger);
 
 app.use('/api', require('./routes/index'));
 
