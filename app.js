@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
@@ -13,6 +14,13 @@ const error = require('./middlewares/error');
 const { PORT = 3000 } = process.env;
 const { MONGO_URI = 'mongodb://localhost:27017/moviesdb' } = process.env;
 const app = express();
+
+app.use(
+  cors({
+    origin: 'https://exploremovies.nomoredomains.xyz/',
+    credentials: true,
+  })
+);
 
 app.use(helmet());
 app.use(requestLogger);
