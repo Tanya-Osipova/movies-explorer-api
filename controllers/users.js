@@ -29,7 +29,7 @@ module.exports.getUser = (req, res, next) => {
 module.exports.updateUser = (req, res, next) => {
   User.findOne({ email: req.body.email })
     .then((user) => {
-      if (user) {
+      if (user._id.toString() !== req.user._id) {
         throw new ConflictError('User already exists');
       }
       User.findByIdAndUpdate(
@@ -112,6 +112,7 @@ module.exports.login = (req, res, next) => {
       return res.cookie('jwt', token, {
         httpOnly: true,
         sameSite: true,
+        maxAge: 3600000 * 24,
       })
         .status(200)
         .json({ message: 'Logged in successfully' });
