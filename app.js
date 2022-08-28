@@ -16,11 +16,9 @@ const { MONGO_URI = 'mongodb://localhost:27017/moviesdb' } = process.env;
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'https://exploremovies.nomoredomains.xyz/api/',
   credentials: true,
-})
-
-);
+}));
 
 app.use(helmet());
 app.use(requestLogger);
